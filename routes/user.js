@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const User = require('../models/User');
 const jwt =require("jsonwebtoken");
 
 
@@ -8,7 +8,7 @@ const jwt =require("jsonwebtoken");
 
 // 회원가입 API
 router.post("/users", async (req, res) => {
-    const { email, password, confirmPassword } = req.body;
+    const { userID, password, confirmPassword } = req.body;
   
     if (password !== confirmPassword) {
       res.status(400).send({
@@ -19,26 +19,25 @@ router.post("/users", async (req, res) => {
   
     // email 이 동일한게 이미 있는지 확인하기 위해 가져온다.
     const existsUsers = await User.findOne({
-      $or: [{ email }],
+      $or: [{ userID }],
     });
     if (existsUsers) {
-      // NOTE: 보안을 위해 인증 메세지는 자세히 설명하지 않는것을 원칙으로 한다: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-responses
       res.status(400).send({
-        errorMessage: "이메일은 이미 사용중입니다.",
+        errorMessage: "아이디는 이미 사용중입니다.",
       });
       return;
     }
   
-    const user = new User({ email, password });
+    const user = new User({ userID, password });
     await user.save();
   
-    res.status(201).send({});
+    res.status(201).send({success:true});
   });
 //로그인
   router.post("/auth", async (req, res) => {
-    const {email, password} = req.body;
+    const {userID, password} = req.body;
 
-    const user = await User.findOne({email, password}).exec();
+    const user = await User.findOne({userID, password}).exec();
     
     if (!user || password !== user.password) {
         res.status(400).send({

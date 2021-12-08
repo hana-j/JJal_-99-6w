@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser= require('cookie-parser');
 const app = express();
 //DB연결
-const connect = monggose.connect("mongodb://localhost:27017/lighthouse",{
+const connect = monggose.connect("mongodb://localhost:27017/ZZAL",{
     useNewUrlParser: true, useUnifiedTopology: true
   })
   .then(() => console.log('MongoDB Connected...'))

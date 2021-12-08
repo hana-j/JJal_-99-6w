@@ -1,11 +1,8 @@
-
-   
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  id: {
-    type:String,
-    unique: 1 
+  userID: {
+    type:String
   },
   password: String,
 });
@@ -18,4 +15,6 @@ UserSchema.set("toJSON", {
   virtuals: true,
 });
 
-module.exports = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
+
+module.exports = { User }
