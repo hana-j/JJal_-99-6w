@@ -27,7 +27,6 @@ const postSchema = monggose.Schema({
     // 좋아요
     postLikeCnt: {
       type: Number,
-      required: true,
       unique: false,
     },
     createdAt:{

@@ -5,7 +5,7 @@ const middleware = require("../middleware/auth-middleware");
 const router = express.Router();
 
 // 댓글 작성
-router.post('/comment',  async (req, res) => {
+router.post('/comment',  middleware, async (req, res) => {
   try{
     //const post= req.body
     const {postId} = req.body
