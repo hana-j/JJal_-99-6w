@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
 app.use('/api/posts', require('./routes/post'))
 app.use('/api/users', require('./routes/user'))
 app.use('/api/comment', require('./routes/comment'))
+app.use('/api/like', require('./routes/like'))
 
 
 const port = 3000;
