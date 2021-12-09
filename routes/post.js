@@ -51,10 +51,6 @@ router.post('/uploadfile', (req, res)=>{  //req는 클라이언트에서 보내�
 //짤파일 정보저장
 router.post('/',middleware, async (req, res)=>{
     try{
-        // const { userId } = res.locals; // 만약 클라이언트 단에서 유저정보를 안넘겨주면 middleware에서 res.locals에 담아온 user할당 
-        // if(!userId){
-        //     res.send(400).send({errormessage:'로그인한 사용자만 파일 업로드가 가능합니다.'})
-        // }else{}
         const video = new Post(req.body)  //req.body 안에 클라이언트에서 보낸 모든 variable 가져옴 (유저아이디까지 넘겨준 상황)
             await video.save((err, doc)=>{
                 if(err) return res.json({success:false, err})
@@ -67,6 +63,7 @@ router.post('/',middleware, async (req, res)=>{
         });
         console.log(error)
     }
+    return;
     
 })
 
