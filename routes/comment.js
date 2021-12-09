@@ -1,24 +1,26 @@
 const express = require("express");
-const Comment = require("../models/comments");
+const Comment = require("../models/Comments");
 //const Like = require("../models/likes");
 const middleware = require("../middleware/auth-middleware");
 const router = express.Router();
 
 // 댓글 작성
-router.post('/comment', middleware, async (req, res) => {
-  const { postId } = req.body
+router.post('/comment',  async (req, res) => {
+  const post= req.body.posts
+  //const postId = post._id;
+  const { commentVal } = req.body
+  console.log(post, commentVal);
   const { user } = res.locals
   const userId = user["userId"]
+
   const recentComment = await Comment.find().sort("-commentId").limit(1);
 
   let commentId = 1
   if (recentComment.length != 0) {
     commentId = recentComment[0]["commentId"] + 1
   }
-  const { commentVal } = req.body
-
-  const date = (new Date().format("yyyy-MM-dd a/p hh:mm:ss"))
-  await Comment.create({ commentId, postId, userId, commentVal, date })
+  
+  await Comment.create({ commentId, postId, commentVal })
   res.send({ result: "success "})
 })
 

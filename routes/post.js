@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Post = require('../models/Post')
-//const auth = requrie('')//권한 미들웨어 받아와서 적용해야함 , 로그인한 유저만 글을 포스팅 가능
+const Comment = require('../models/Comments');
+//const middleware = require("../middleware/auth-middleware");//권한 미들웨어 받아와서 적용해야함 , 로그인한 유저만 글을 포스팅 가능
 
 //Storage multer 
 let storage = multer.diskStorage({
@@ -50,7 +51,7 @@ router.post('/uploadfile', (req, res)=>{  //req는 클라이언트에서 보내�
 //짤파일 정보저장
 router.post('/',(req, res)=>{
     try{
-        // const { user } = res.locals; // 만약 클라이언트 단에서 유저정보를 안넘겨주면 middleware에서 res.locals에 담아온 user할당 
+        // const { userId } = res.locals; // 만약 클라이언트 단에서 유저정보를 안넘겨주면 middleware에서 res.locals에 담아온 user할당 
         // if(!userId){
         //     res.send(400).send({errormessage:'로그인한 사용자만 파일 업로드가 가능합니다.'})
         // }else{}
@@ -71,11 +72,10 @@ router.post('/',(req, res)=>{
 
 //메인페이지 리스트
 router.get('/', async(req, res)=>{
-
     let page = req.query['page'];  //쿼리파리미터로 페이지 받아오기
-    
     page = page || 1 
     console.log(page)
+    
     try{
         const posts = await Post.find({})
             .sort({createdAt:-1})  //생성순으로 정렬, 조회수로 변경할건지 논의 할것
@@ -84,8 +84,12 @@ router.get('/', async(req, res)=>{
         if(posts.length ==0){     
             res.send({next:false}) 
         }else{
-            res.json({posts})     //클라이언트에 post객체 response
-            console.log(posts)
+            let postId = posts._id;
+            const comment = await Comment.find({postId})
+            const commentCnt = comment.length;
+            Post.update({_id:postId}, {$set:{commentCnt:commentCnt}});
+            res.send({posts})     //클라이언트에 post객체 response
+            console.log(posts, commentCnt)
             
         }
     }catch(error){

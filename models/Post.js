@@ -20,8 +20,7 @@ const postSchema = monggose.Schema({
         type:Number,
         default:0
     },
-    //좋아요 count  ?필요한가 ??
-    likesCnt:{
+    commentCnt:{
         type:Number,
         default:0
     },
