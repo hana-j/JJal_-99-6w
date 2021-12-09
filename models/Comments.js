@@ -12,8 +12,7 @@ const commentSchema = new Schema({
     required: true,
   },
   postId: {
-    type: Number,
-    required: true,
+   type: mongoose.Schema.Types.ObjectId, ref: 'post', required: true 
   },
   commentVal: {
     type: String,

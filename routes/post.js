@@ -115,11 +115,11 @@ router.get('/:postId', async (req, res)=>{
     }
 })
 //검색
-router.get('/search/tag', async(req, res)=>{
+router.post('/search/tag', async(req, res)=>{
     const searchTag = req.body;
     console.log(searchTag['description'])
     try{
-        const tag = searchTag['description'] //공백을 기준으로 나누어서 검색 searchTag => db에는 description으로 저장
+        const tag = searchTag['description'].trim(); //공백을 기준으로 나누어서 검색 searchTag => db에는 description으로 저장
         const search = await Post.find({description:new RegExp(tag,'i')}).sort('-createdAt') //몽구스 like검색 정규식 사용 ,i는 대소문자 무시
         res.status(200).send({result:{search}})
     }catch(error){
@@ -139,4 +139,4 @@ router.delete('/:postId', async (req, res)=>{
     }
    
 })
-module.exports = router;
+module.exports = router;    

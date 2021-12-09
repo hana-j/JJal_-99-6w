@@ -6,22 +6,29 @@ const router = express.Router();
 
 // 댓글 작성
 router.post('/comment',  async (req, res) => {
-  const post= req.body.posts
-  //const postId = post._id;
-  const { commentVal } = req.body
-  console.log(post, commentVal);
-  const { user } = res.locals
-  const userId = user["userId"]
+  try{
+    //const post= req.body
+    const {postId} = req.body
+    const { commentVal } = req.body
+    const {userId} = req.body  //userId는 또 그냥 String으로 받을 수 있다 나는 이해가 안된다.....
+    //console.log(post, commentVal);
+    // const { user } = res.locals
+    // const userId = user["userId"]
 
-  const recentComment = await Comment.find().sort("-commentId").limit(1);
+    const recentComment = await Comment.find().sort("-commentId").limit(1);
 
-  let commentId = 1
-  if (recentComment.length != 0) {
-    commentId = recentComment[0]["commentId"] + 1
+    let commentId = 1
+    if (recentComment.length != 0) {
+      commentId = recentComment[0]["commentId"] + 1
+    }
+    
+    await Comment.create({ commentId, postId,userId, commentVal })
+    res.send({ result: "success "})
+  }catch(error){
+    res.send(error)
+    console.log(error);
   }
-  
-  await Comment.create({ commentId, postId, commentVal })
-  res.send({ result: "success "})
+  return;
 })
 
 // 댓글 불러오기
