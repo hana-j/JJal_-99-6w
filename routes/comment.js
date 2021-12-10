@@ -37,28 +37,43 @@ router.get("/comment/:commentId", async (req, res) => {
   const comment = await Comment.find({ postId }).sort("-commentId")
   res.json({ comment: comment })
 })
+//댓글삭제
+router.delete('/:commentId', middleware, async (req, res)=>{
+  const { commentId } = req.params
+  const { userId } = req.body
 
-// 댓글 삭제
-router.delete('/comment',middleware, async (req, res)=>{
-  const { commentId } = req.body;
-  try{
-      await Comment.deleteOne({ commentId });
-      res.send({succes:true})
-  }catch(error){
-      res.status(400).send({errormessage:"삭제중 오류가 발생했습니다."})
-      console.log(error);
+  const current_user = userId
+  // console.log("current_user", current_user)
+  const userComment = await Comment.findOne({ commentId })
+  // console.log("userComment",userComment)
+  const commentUserId = userComment["userId"]
+  // console.log("commentUserId", commentUserId)
+
+  if (current_user === commentUserId) {
+    await Comment.deleteOne({ commentId })
+    res.send({succes: true})
+  } else {
+    res.send({result: '로그인 후 이용하시오'})
   }
 })
 
 // 댓글 수정
-router.put('/comment',middleware, async (req, res)=>{
-  const { commentId, commentVal } = req.body;
-  try{
-      await Comment.updateOne({ commentId }, { $set: { commentVal }})
-      res.send({succes:true})
-  }catch(error){
-      res.status(400).send({errormessage:"수정중 오류가 발생했습니다."})
-      console.log(error);
+router.put('/:commentId',middleware, async (req, res)=>{
+  const { commentId, commentVal } = req.params
+  const { userId } = req.body
+
+  const current_user = userId
+  // console.log("current_user", current_user)
+  const userComment = await Comment.findOne({ commentId })
+  // console.log("userComment",userComment)
+  const commentUserId = userComment["userId"]
+  // console.log("commentUserId", commentUserId)
+
+  if (current_user === commentUserId) {
+    await Comment.updateOne({ commentId }, { $set: { commentVal }})
+    res.send({succes: true})
+  } else {
+    res.send({errormessage:"수정중 오류가 발생했습니다."})
   }
 })
 

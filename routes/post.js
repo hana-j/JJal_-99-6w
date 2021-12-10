@@ -80,17 +80,17 @@ router.post('/lists', async(req, res)=>{
             .sort({createdAt:-1})  //생성순으로 정렬, 조회수로 변경할건지 논의 할것
             .skip((page-1)*20)   //20개씩 빼고 보여줌 
             .limit(20)        //20개씩 보여줌 
-        if(posts.length ==0){     
-            res.send({next:false}) 
-        }else{
-            let postId = posts._id;
-            const comment = await Comment.find({postId})
-            const commentCnt = comment.length;
-            Post.update({_id:postId}, {$set:{commentCnt:commentCnt}});
-            res.send({posts})     //클라이언트에 post객체 response
-            console.log(posts, commentCnt)
-            
-        }
+        let postId = posts._id;
+        const comment = await Comment.find({postId})
+        const commentCnt = comment.length;
+        await Post.updateOne({_id:postId}, {$set:{commentCnt:commentCnt}});
+        
+            if(posts.length !==20){
+                res.send({posts, next:false}) 
+            }else if(posts.length <=20){
+                res.send({posts, next:true})  
+            }
+        
     }catch(error){
         res.status(400).send({
             errormessage:"포스트를 불러오는 중 오류가 발생"
@@ -109,7 +109,7 @@ router.get('/:postId', async (req, res)=>{
         res.json({post});
         
     }catch(error){
-        res.status(400).send({errormessage:"포스트를 불러오는 중 오류가 발생"})
+        res.send({errormessage:"더이상 포스트가 없습니다"})
         console.log(error);
     }
 })
@@ -131,11 +131,14 @@ router.delete('/',middleware, async (req, res)=>{
     const {postId} = req.body;  //{postId}로 구조분해 할당해주면 object값 자체가 아닌 value값만 받을 수 잇다. object아이디임 
     const {userID} = req.body;
     try{
-        const isPost = Post.find().where('_id').equals(postId).where('userID').equals(userID);
-        console.log(isPost)
-        if(isPost !==null){
-            await Post.findByIdAndDelete(postId);
-            res.send({succes:true})
+        const db_user = Post.find({'_id':postId}).where('userID').equals(userID);
+        console.log(db_user)
+        if(db_user){
+            console.log('ajaa')
+           await Post.findOneAndDelete(postId);  
+           await Comment.deleteMany({ postId: postId });
+           res.send({success:true})
+  
         }else{
             res.send({errormessage:"본인의 게시글만 삭제가 가능합니다."})
         }
