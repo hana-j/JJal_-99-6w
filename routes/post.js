@@ -33,7 +33,10 @@ router.post('/uploadfile', (req, res)=>{  //req는 클라이언트에서 보내�
         upload(req, res, err=>{
             if(err){
                 return res.send({errormessage:"파일 업로드 중 오류가 발생했습니다."})
+            }else{
+                
             }
+
             return res.json({succes:true,      //성공하면 파일경로, 파일 이름 클라이언트로
                 url:res.req.file.path,  //path랑 
                 fileName: res.req.file.filename //filename
@@ -47,8 +50,8 @@ router.post('/uploadfile', (req, res)=>{  //req는 클라이언트에서 보내�
     }
     
 })
-//사용자 정보 쿠키로 넘기면 클라이언트에서 받아주고 세션이면 서버에서 받기
-//짤파일 정보저장
+// 사용자 정보 쿠키로 넘기면 클라이언트에서 받아주고 세션이면 서버에서 받기
+// 짤파일 정보저장
 router.post('/',middleware, async (req, res)=>{
     try{
         const video = new Post(req.body)  //req.body 안에 클라이언트에서 보낸 모든 variable 가져옴 (유저아이디까지 넘겨준 상황)
@@ -66,10 +69,9 @@ router.post('/',middleware, async (req, res)=>{
     return;
     
 })
-
 //메인페이지 리스트
-router.get('/', async(req, res)=>{
-    let page = req.query['page'];  //쿼리파리미터로 페이지 받아오기
+router.post('/lists', async(req, res)=>{
+    let {page} = req.body;  //바디로 받아옴 페이지 받아오기
     page = page || 1 
     console.log(page)
     
@@ -125,11 +127,18 @@ router.post('/search/tag', async(req, res)=>{
 })
 
 //삭제
-router.delete('/:postId',middleware, async (req, res)=>{
-    const {postId} = req.params;  //{postId}로 구조분해 할당해주면 object값 자체가 아닌 value값만 받을 수 잇다.
+router.delete('/',middleware, async (req, res)=>{
+    const {postId} = req.body;  //{postId}로 구조분해 할당해주면 object값 자체가 아닌 value값만 받을 수 잇다. object아이디임 
+    const {userID} = req.body;
     try{
-        await Post.findByIdAndDelete(postId);
-        res.send({succes:true})
+        const isPost = Post.find().where('_id').equals(postId).where('userID').equals(userID);
+        console.log(isPost)
+        if(isPost !==null){
+            await Post.findByIdAndDelete(postId);
+            res.send({succes:true})
+        }else{
+            res.send({errormessage:"본인의 게시글만 삭제가 가능합니다."})
+        }
     }catch(error){
         res.status(400).send({errormessage:"삭제중 오류가 발생했습니다."})
         console.log(error);
