@@ -1,7 +1,7 @@
-const express = require("express");
-const Comment = require("../models/Comments");
+const express = require('express');
+const Comment = require('../models/Comments');
 //const Like = require("../models/likes");
-const middleware = require("../middleware/auth-middleware");
+const middleware = require('../middleware/auth-middleware');
 const router = express.Router();
 
 // 댓글 작성
