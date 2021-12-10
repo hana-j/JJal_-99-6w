@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const Post = require('../models/Post')
 const Comment = require('../models/Comments');
-const middleware = require("../middleware/auth-middleware");//권한 미들웨어 받아와서 적용해야함 , 로그인한 유저만 글을 포스팅 가능
+const middleware = require('../middleware/auth-middleware');//권한 미들웨어 받아와서 적용해야함 , 로그인한 유저만 글을 포스팅 가능
 
 //Storage multer 
 let storage = multer.diskStorage({
