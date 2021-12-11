@@ -4,7 +4,9 @@ const User = require('../models/User');
 const jwt =require("jsonwebtoken");
 const bcrypt  = require('bcrypt');
 const Joi = require('joi')
-const config = require('../config/dev')
+const config = require('../config/dev');
+const Post = require('../models/Post');
+const Likes = require('../models/Likes')
 
 // 회원가입 유효성 검사 (Joi)
 const registerSchema = Joi.object({
@@ -90,6 +92,28 @@ router.post("/auth", async (req, res) => {
         token
     })
 });
-
+//내가 찜한 목록 불러오기
+router.post('/likeImg', async(req, res)=>{
+  const {userID} = req.body;
+  const postArr =[];
+  let posts = await Likes.find({'userID':userID})
+    for(let i =0 ;i<posts.length;i++){
+      const  postId = posts[i]["postId"].toHexString();  //toHexString()이렇게 하면 new ObjectId:"61b31d2e55813b401e73c6eb"안에 objectId만 가져올수 잇음
+      console.log(postId);
+      const post = await Post.findById(postId);
+      postArr.push(post);
+    }
+  try{
+   
+    if(posts.length ==0){
+      res.send({message:"찜한 목록이 없습니다."})
+    }else{
+      res.send(postArr)
+    }
+  }catch(error){
+    res.send({errorMessage:"목록을 불러오는 중 오류발생"})
+    console.log(error)
+  }
+})
 
 module.exports = router;

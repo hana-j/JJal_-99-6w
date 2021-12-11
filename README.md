@@ -11,8 +11,8 @@
 - 정하나 : post + main
 - 김다희 : comment + like
 #### Frontend
-- 임찬수 : 
-- 이주형 : 
+- 임찬수  
+- 이주형 
 
 
 ## 🛠 사용 기술
@@ -22,8 +22,6 @@
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 #### Frameworks, Platforms and Libraries
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 #### IDEs/Editors
@@ -57,5 +55,4 @@
 #### 한동훈 
 #### 정하나
 #### 김다희 
-#### 임찬수 
-#### 이주형 
+
