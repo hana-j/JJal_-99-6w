@@ -98,7 +98,7 @@ router.post('/likeImg', async(req, res)=>{
   const postArr =[];
   let posts = await Likes.find({'userID':userID})
     for(let i =0 ;i<posts.length;i++){
-      const  postId = posts[i]["postId"].toHexString();  //toHexString()이렇게 하면 new ObjectId:"61b31d2e55813b401e73c6eb"안에 objectId만 가져올수 잇음
+      const  postId = posts[i]["postId"].toHexString();  //toHexString()이렇게 하면 new ObjectId:("61b31d2e55813b401e73c6eb")안에 objectId만 가져올수 잇음
       console.log(postId);
       const post = await Post.findById(postId);
       postArr.push(post);
