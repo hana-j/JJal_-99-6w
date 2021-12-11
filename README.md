@@ -42,11 +42,36 @@
 ## 📝 요구사항
 - 아이디, 닉네임 중복확인
 
-## 📜 핵심기능
-- JWT를 이용하여 로그인과 회원가입 구현
 
-## 📜 API 설계
+
+## 🎢 API 설계
 #### user
+- Post /api/users/auth
+- Post /api/users/users
+- Post Ip/api/users/checkId
+#### post
+- Post /api/posts/lists
+- Post /api/posts
+- Post /api/posts/details
+- Post /api/posts/search/tag
+- Post /api/posts/uploadfile
+- Delete /api/posts:postId
+#### comment
+- Post /api/comment/
+- Put /api/comment/detail
+- Delete /api/comment/detail
+- Post /api/comment/detail
+#### like
+- Post /api/like/likes
+- Post /api/like/likes
+#### myPage
+- Post /api/users/likeImg
+- Post /api/users/myPostImgs
+
+## 📜 핵심기능
+#### 로그인/회원가입
+- JWT를 이용하여 로그인과 회원가입 구현
+- 아이디가 
 
 ## 🤦🏻 프로젝트 중 힘들었던 점이 있다면
 - 힘든점~~~~~~
