@@ -104,16 +104,28 @@ router.post('/likeImg', async(req, res)=>{
       postArr.push(post);
     }
   try{
-   
     if(posts.length ==0){
-      res.send({message:"찜한 목록이 없습니다."})
+      res.send({message:"찜한 목록이 없습니다."});
     }else{
       res.send(postArr)
     }
   }catch(error){
-    res.send({errorMessage:"목록을 불러오는 중 오류발생"})
+    res.send({errorMessage:"목록을 불러오는 중 오류발생"});
     console.log(error)
   }
 })
-
+//내가 등록한 짤 가져오기
+router.post('/myPostImgs', async(req, res)=>{
+  const {userID} = req.body;
+  const myPosts = await Post.find({'userID':userID})
+  try{
+    if(myPosts.length ==0){
+      res.send({message:"내가 등록한 짤이 없습니다."});
+    }else{
+      res.send(myPosts)
+    }
+  }catch(error){
+    res.send({errorMessage:"목록을 불러오는 중 오류발생"});
+  }
+})
 module.exports = router;
